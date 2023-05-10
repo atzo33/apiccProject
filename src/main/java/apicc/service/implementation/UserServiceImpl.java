@@ -1,6 +1,7 @@
 package apicc.service.implementation;
 
 import apicc.model.dto.UserDTO;
+import apicc.model.entity.Roles;
 import apicc.model.entity.User;
 import apicc.repository.UserRepository;
 import apicc.service.UserService;
@@ -46,6 +47,7 @@ public class UserServiceImpl implements UserService {
         newUser.setFirstName(user.getFirstName());
         newUser.setLastName(user.getLastName());
         newUser = userRepository.save(newUser);
+        newUser.setRole(Roles.USER);
 
         return newUser;
     }
