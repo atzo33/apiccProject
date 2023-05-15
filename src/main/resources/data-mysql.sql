@@ -1,0 +1,1 @@
+INSERT INTO users(email,first_name,last_login,last_name,password,role,username) values ('user@user.user','user',now(),'user','$2a$12$MEH9aheZlPHKBVBFpTN3uetm1MFW.wBKdIAZG9Cj57DJONm//ATna','USER','user');

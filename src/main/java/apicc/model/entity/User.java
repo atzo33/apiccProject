@@ -1,11 +1,12 @@
 package apicc.model.entity;
 
-import jakarta.persistence.*;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.naming.Name;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity

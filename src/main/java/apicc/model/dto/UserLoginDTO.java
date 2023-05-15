@@ -6,11 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
-
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserDTO {
+public class UserLoginDTO {
 
     private Long id;
 
@@ -20,22 +19,11 @@ public class UserDTO {
     @NotBlank
     private String password;
 
-    @NotBlank
-    private String email;
-
-    @NotBlank
-    private String firstName;
-
-    @NotBlank
-    private String lastName;
-
-
-    public UserDTO(User createdUser) {
+    public UserLoginDTO(User createdUser) {
         this.id = createdUser.getId();
         this.username = createdUser.getUsername();
-        this.password=createdUser.getPassword();
-        this.email= createdUser.getEmail();
-        this.firstName=createdUser.getFirstName();
-        this.lastName= createdUser.getLastName();
     }
+
+
+
 }
