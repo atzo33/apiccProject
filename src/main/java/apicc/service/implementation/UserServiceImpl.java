@@ -49,7 +49,6 @@ public class UserServiceImpl implements UserService {
         newUser.setLastName(userDTO.getLastName());
         newUser.setLastLogin(LocalDateTime.now());
         newUser.setRole(Roles.USER);
-
         newUser = userRepository.save(newUser);
 
         return newUser;
