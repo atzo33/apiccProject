@@ -1,5 +1,6 @@
 package apicc.controller;
 
+import apicc.model.dto.TokenResponse;
 import apicc.model.dto.UserDTO;
 import apicc.model.dto.UserLoginDTO;
 import apicc.model.entity.User;
@@ -49,9 +50,25 @@ public class UserController {
         return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
     }
 
+//    @PostMapping("/login" )
+//    public ResponseEntity<String> login(@RequestBody UserLoginDTO userLoginDTO) {
+//        System.out.println("Nesto");
+//        UsernamePasswordAuthenticationToken authenticationToken =
+//                new UsernamePasswordAuthenticationToken(userLoginDTO.getUsername(), userLoginDTO.getPassword());
+//        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//
+//        try {
+//            UserDetails userDetails = userDetailsService.loadUserByUsername(userLoginDTO.getUsername());
+//            return ResponseEntity.ok(tokenUtils.generateToken(userDetails));
+//        } catch (UsernameNotFoundException e) {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
+
+
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserLoginDTO userLoginDTO) {
-        System.out.println("Nesto");
+    public ResponseEntity<TokenResponse> login(@RequestBody UserLoginDTO userLoginDTO) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userLoginDTO.getUsername(), userLoginDTO.getPassword());
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
@@ -59,10 +76,15 @@ public class UserController {
 
         try {
             UserDetails userDetails = userDetailsService.loadUserByUsername(userLoginDTO.getUsername());
-            return ResponseEntity.ok(tokenUtils.generateToken(userDetails));
+            String token = tokenUtils.generateToken(userDetails);
+            TokenResponse responseDTO = new TokenResponse(token);
+
+            return ResponseEntity.ok(responseDTO);
         } catch (UsernameNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
+
+
 
 }

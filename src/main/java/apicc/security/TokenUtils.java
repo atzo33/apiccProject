@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -78,5 +79,17 @@ public class TokenUtils {
         return Jwts.builder().setClaims(claims)
                 .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
+    }
+
+    public String getToken(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        if (token != null) {
+            if (token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+        } else {
+            return null;
+        }
+        return token;
     }
 }
