@@ -37,7 +37,7 @@ public class UserController {
     @Autowired
     TokenUtils tokenUtils;
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<UserDTO> create(@RequestBody @Validated UserDTO newUser){
 
         User createdUser = userService.createUser(newUser);
@@ -65,6 +65,8 @@ public class UserController {
 //            return ResponseEntity.notFound().build();
 //        }
 //    }
+
+
 
 
     @PostMapping("/login")
