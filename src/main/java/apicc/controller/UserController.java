@@ -9,6 +9,7 @@ import apicc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,10 +18,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/users")
@@ -50,22 +51,18 @@ public class UserController {
         return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
     }
 
-//    @PostMapping("/login" )
-//    public ResponseEntity<String> login(@RequestBody UserLoginDTO userLoginDTO) {
-//        System.out.println("Nesto");
-//        UsernamePasswordAuthenticationToken authenticationToken =
-//                new UsernamePasswordAuthenticationToken(userLoginDTO.getUsername(), userLoginDTO.getPassword());
-//        Authentication authentication = authenticationManager.authenticate(authenticationToken);
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-//        try {
-//            UserDetails userDetails = userDetailsService.loadUserByUsername(userLoginDTO.getUsername());
-//            return ResponseEntity.ok(tokenUtils.generateToken(userDetails));
-//        } catch (UsernameNotFoundException e) {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<UserDTO> loadAllUsers() {
+        return this.userService.findAllUsers();
+    }
 
+
+    @GetMapping("/whoami")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public User user(Principal user) {
+        return this.userService.findByUsername(user.getName());
+    }
 
 
 

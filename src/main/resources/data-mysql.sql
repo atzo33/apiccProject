@@ -1,1 +1,2 @@
 INSERT INTO users(email,first_name,last_login,last_name,password,role,username) values ('user@user.user','user',now(),'user','$2a$12$MEH9aheZlPHKBVBFpTN3uetm1MFW.wBKdIAZG9Cj57DJONm//ATna','USER','user');
+INSERT INTO users(email,first_name,last_login,last_name,password,role,username) values ('admin@admin.admin','admin',now(),'admin','$2a$12$uU/xFgR5l/Gge/0cI.mD8uKtTB0Q968B61XKILWFTT7gzzhEP5rY.','ADMIN','admin');

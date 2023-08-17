@@ -5,11 +5,16 @@ import apicc.model.entity.Roles;
 import apicc.model.entity.User;
 import apicc.repository.UserRepository;
 import apicc.service.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,6 +25,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    private ModelMapper modelMapper;
+    @Autowired
+    public UserServiceImpl(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
+
 
     @Override
     public User findByUsername(String username) {
@@ -52,6 +63,26 @@ public class UserServiceImpl implements UserService {
         newUser = userRepository.save(newUser);
 
         return newUser;
+    }
+
+    @Override
+    public List <UserDTO> findAllUsers() {
+
+        List<User> users = userRepository.findAll();
+        List<UserDTO>userDTOS = new ArrayList<>();
+        for (User user :users){
+            UserDTO userDTO = modelMapper.map(user,UserDTO.class);
+            userDTOS.add(userDTO);
+        }
+        return userDTOS;
+    }
+
+    @Override
+    public User loggedUser() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return this.findByUsername(username);
     }
 
 }
