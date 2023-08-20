@@ -6,6 +6,7 @@ import apicc.model.dto.UserLoginDTO;
 import apicc.model.entity.User;
 import apicc.security.TokenUtils;
 import apicc.service.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,8 @@ public class UserController {
 
     @Autowired
     TokenUtils tokenUtils;
+    @Autowired
+    ModelMapper modelMapper;
 
     @PostMapping("/register")
     public ResponseEntity<UserDTO> create(@RequestBody @Validated UserDTO newUser){
@@ -60,10 +63,11 @@ public class UserController {
 
     @GetMapping("/whoami")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public User user(Principal user) {
-        return this.userService.findByUsername(user.getName());
+    public UserDTO loggedUserDTO() {
+        User user = this.userService.loggedUser(); // Assuming loggedUser() returns a User entity
+        UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+        return userDTO;
     }
-
 
 
     @PostMapping("/login")

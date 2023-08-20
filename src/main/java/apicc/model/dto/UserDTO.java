@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class UserDTO {
 
-    private Long id;
+    private Integer id;
 
     @NotBlank
     private String username;
