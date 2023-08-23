@@ -14,4 +14,6 @@ public interface UserService {
     List<UserDTO> findAllUsers();
 
     User loggedUser();
+
+    UserDTO updateUser(UserDTO userDTO,int id);
 }

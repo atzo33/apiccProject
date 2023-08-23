@@ -15,7 +15,9 @@ public interface PostService {
 
     PostDTO deletePost(int id);
 
-    PostDTO updatePost(PostDTO newPostDTO);
+    PostDTO updatePost(PostDTO newPostDTO, int id);
+
+
 
     List<PostDTO> findAll();
 

@@ -1,6 +1,8 @@
 package apicc.service.implementation;
 
+import apicc.model.dto.PostDTO;
 import apicc.model.dto.UserDTO;
+import apicc.model.entity.Post;
 import apicc.model.entity.Roles;
 import apicc.model.entity.User;
 import apicc.repository.UserRepository;
@@ -84,5 +86,23 @@ public class UserServiceImpl implements UserService {
         String username = authentication.getName();
         return this.findByUsername(username);
     }
+
+    @Override
+    public UserDTO updateUser(UserDTO userDTO, int id) {
+
+        User user = userRepository.findById(id).orElseThrow(()->new RuntimeException());
+
+
+
+
+        user.setUsername(userDTO.getUsername());
+        user.setEmail(userDTO.getEmail());
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        userRepository.save(user);
+
+        return modelMapper.map(user, UserDTO.class);
+    }
+
 
 }

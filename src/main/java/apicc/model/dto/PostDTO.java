@@ -20,7 +20,6 @@ public class PostDTO {
 
     private String content;
 
-    private Set<String> images = new HashSet<>();
 
     private String creationDate;
 }

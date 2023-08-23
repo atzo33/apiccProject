@@ -10,7 +10,6 @@ import apicc.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -53,6 +52,12 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDTO deletePost(int id) {
+        Post post = postRepository.findById(id).orElseThrow(()->new RuntimeException());
+
+        System.out.println(userService.loggedUser().getId());
+        if ( userService.loggedUser().getId() != post.getUser().getId()){
+            throw new RuntimeException("Unauthorized");
+        }
 
         this.postRepository.deleteById(id);
 
@@ -60,10 +65,32 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDTO updatePost(PostDTO newPostDTO) {
+    public PostDTO updatePost(PostDTO postDTO,int id) {
 
-        return null;
+        Post post = postRepository.findFirstByIdWithCollections(id).orElseThrow(()->new RuntimeException());
+        System.out.println(post.getContent());
+
+        if (userService.loggedUser().getId() != post.getUser().getId()){
+            throw new RuntimeException("Unauthorized");
+        }
+
+        post.setContent(postDTO.getContent());
+        postRepository.save(post);
+
+        return modelMapper.map(post, PostDTO.class);
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
     @Override
     public List<PostDTO> findAll() {
@@ -82,11 +109,13 @@ public class PostServiceImpl implements PostService {
         return postDTOs;
     }
 
+
+
     @Override
     public PostDTO findById(int id) {
 
 
-        Optional<Post> post = postRepository.findById(id);
+        Optional<Post> post = postRepository.findFirstByIdWithCollections(id);
         if (post.isEmpty()) {
 
             return null;

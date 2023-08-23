@@ -1,5 +1,6 @@
 package apicc.controller;
 
+import apicc.model.dto.PostDTO;
 import apicc.model.dto.TokenResponse;
 import apicc.model.dto.UserDTO;
 import apicc.model.dto.UserLoginDTO;
@@ -67,6 +68,11 @@ public class UserController {
         User user = this.userService.loggedUser(); // Assuming loggedUser() returns a User entity
         UserDTO userDTO = modelMapper.map(user, UserDTO.class);
         return userDTO;
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<UserDTO> update(@RequestBody UserDTO userDTO, @PathVariable int id) {
+        return new ResponseEntity<>(this.userService.updateUser(userDTO,id), HttpStatus.OK);
     }
 
 

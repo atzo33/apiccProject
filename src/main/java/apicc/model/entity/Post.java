@@ -25,6 +25,7 @@ public class Post {
     private String content;
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
+
     @OneToMany(fetch = FetchType.LAZY)
     private Set<Image> images = new HashSet<>();
 
