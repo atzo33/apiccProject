@@ -16,4 +16,8 @@ public interface UserService {
     User loggedUser();
 
     UserDTO updateUser(UserDTO userDTO,int id);
+
+    UserDTO updatePassword(String password, int id);
+
+
 }

@@ -24,4 +24,6 @@ public interface PostService {
     PostDTO findById(int id);
 
     List<PostDTO> findAllByUser(int id);
+
+    Post findOnePost(int id);
 }

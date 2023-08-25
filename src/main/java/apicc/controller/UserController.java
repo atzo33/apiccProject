@@ -1,9 +1,6 @@
 package apicc.controller;
 
-import apicc.model.dto.PostDTO;
-import apicc.model.dto.TokenResponse;
-import apicc.model.dto.UserDTO;
-import apicc.model.dto.UserLoginDTO;
+import apicc.model.dto.*;
 import apicc.model.entity.User;
 import apicc.security.TokenUtils;
 import apicc.service.UserService;
@@ -19,11 +16,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+
+
 
 @RestController
 @RequestMapping("api/users")
@@ -41,6 +41,9 @@ public class UserController {
     TokenUtils tokenUtils;
     @Autowired
     ModelMapper modelMapper;
+    @Autowired
+    private PasswordEncoder encoder;
+
 
     @PostMapping("/register")
     public ResponseEntity<UserDTO> create(@RequestBody @Validated UserDTO newUser){
@@ -92,6 +95,26 @@ public class UserController {
         } catch (UsernameNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PutMapping("/password-change")
+    public ResponseEntity<UserDTO> changePassword(@RequestBody PasswordDTO passwordDTO) {
+        String newPasswordHashed=encoder.encode(passwordDTO.getNewPassword());
+        String oldPassword=passwordDTO.getOldPassword();
+        User user=userService.loggedUser();
+        String currentPw=user.getPassword();
+        int id=passwordDTO.getId();
+        if (!encoder.matches(currentPw, oldPassword)){
+
+            return new ResponseEntity<>(this.userService.updatePassword(newPasswordHashed,id), HttpStatus.OK);
+        } else {
+
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+
+
+
     }
 
 

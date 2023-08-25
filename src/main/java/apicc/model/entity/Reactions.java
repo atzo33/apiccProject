@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Setter
@@ -18,20 +19,20 @@ public class Reactions {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "type",nullable = false)
+    @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private EReaction type;
     @Column(name = "timestamp")
-    private LocalDate timeOfReaction;
+    private LocalDateTime timeOfReaction;
     @Column(name = "deleted")
     private boolean isDeleted;
     @JoinColumn(name = "user_id",referencedColumnName = "id")
     @ManyToOne
-    private User user;
+    private User reactedBy;
     @JoinColumn(name = "comment_id",referencedColumnName = "id")
     @ManyToOne
-    private Comment comment;
+    private Comment commentIdReactedTo;
     @JoinColumn(name = "post_id",referencedColumnName = "id")
     @ManyToOne
-    private Post post;
+    private Post postIdReactedTo;
 }

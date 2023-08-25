@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,8 +59,8 @@ public class PostServiceImpl implements PostService {
         if ( userService.loggedUser().getId() != post.getUser().getId()){
             throw new RuntimeException("Unauthorized");
         }
-
-        this.postRepository.deleteById(id);
+        post.setDeleted(true);
+        this.postRepository.save(post);
 
         return null;
     }
@@ -141,5 +142,10 @@ public class PostServiceImpl implements PostService {
             }
         }
         return postDTOS;
+    }
+
+    @Override
+    public Post findOnePost(int id) {
+        return postRepository.findFirstByIdWithCollections(id).orElseThrow(() -> new EntityNotFoundException("Post not found"));
     }
 }

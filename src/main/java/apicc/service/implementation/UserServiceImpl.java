@@ -1,8 +1,6 @@
 package apicc.service.implementation;
 
-import apicc.model.dto.PostDTO;
 import apicc.model.dto.UserDTO;
-import apicc.model.entity.Post;
 import apicc.model.entity.Roles;
 import apicc.model.entity.User;
 import apicc.repository.UserRepository;
@@ -79,6 +77,8 @@ public class UserServiceImpl implements UserService {
         return userDTOS;
     }
 
+
+
     @Override
     public User loggedUser() {
 
@@ -99,6 +99,20 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userDTO.getEmail());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
+        userRepository.save(user);
+
+        return modelMapper.map(user, UserDTO.class);
+    }
+    @Override
+    public UserDTO updatePassword(String password, int id) {
+
+        User user = userRepository.findById(id).orElseThrow(()->new RuntimeException());
+
+
+
+
+        user.setPassword(password);
+
         userRepository.save(user);
 
         return modelMapper.map(user, UserDTO.class);
