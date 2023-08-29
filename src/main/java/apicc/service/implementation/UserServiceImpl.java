@@ -42,6 +42,16 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    @Override
+    public User findById(int id) {
+
+        Optional<User> user=userRepository.findById(id);
+
+
+
+        return modelMapper.map(user, User.class);
+    }
+
 
     @Override
     public User createUser(UserDTO userDTO) {

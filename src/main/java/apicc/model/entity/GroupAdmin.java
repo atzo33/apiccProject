@@ -2,6 +2,7 @@ package apicc.model.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -11,16 +12,23 @@ import java.util.Set;
 @Entity
 @Setter
 @Getter
-@NoArgsConstructor
+@RequiredArgsConstructor
 @Table(name = "group_admin")
 public class GroupAdmin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Integer id;
+
     @ManyToOne
     private User user;
-    @OneToMany(fetch = FetchType.LAZY)
-    private Set<Banned> by = new HashSet<>();
+
+    @ManyToOne
+    private Group adminAt;
+
+    @OneToMany
+    private Set<Banned> bans = new HashSet<>();
+
+    @Column
+    private boolean isDeleted;
 }

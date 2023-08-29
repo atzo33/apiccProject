@@ -19,16 +19,16 @@ public class GroupRequest {
     @Column(name = "id")
     private Integer id;
     @Column(name = "approved")
-    private boolean approved;
+    private Boolean approved;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     @Column(name = "at")
     private LocalDateTime at;
     @JoinColumn(name = "group_id",referencedColumnName = "id")
     @ManyToOne
-    private Group group;
+    private Group groupTarget;
     @JoinColumn(name = "user_id",referencedColumnName = "id")
     @ManyToOne
-    private User user;
+    private User userRequesting;
 
 }
