@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface PostService {
 
+    PostDTO newPostForGroup(PostDTO newPostDTO);
+
     PostDTO newPost(PostDTO newPostDTO);
 
 
@@ -26,4 +28,6 @@ public interface PostService {
     List<PostDTO> findAllByUser(int id);
 
     Post findOnePost(int id);
+
+    List<PostDTO> findAllByGroupID(int id);
 }

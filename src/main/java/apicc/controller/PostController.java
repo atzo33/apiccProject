@@ -26,6 +26,12 @@ public class PostController {
         return new ResponseEntity<>(this.postService.newPost(newPost), HttpStatus.OK);
     }
 
+    @PostMapping("/group/add")
+    public ResponseEntity<PostDTO> createForGroup(@RequestBody @Validated PostDTO newPost){
+
+        return new ResponseEntity<>(this.postService.newPostForGroup(newPost), HttpStatus.OK);
+    }
+
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<PostDTO>> findAllPostsByUser(@PathVariable int userId) {
 
@@ -51,6 +57,11 @@ public class PostController {
     @PutMapping(value = "/{id}")
     public ResponseEntity<PostDTO> update(@RequestBody PostDTO postDTO,@PathVariable int id) {
         return new ResponseEntity<>(this.postService.updatePost(postDTO,id), HttpStatus.OK);
+    }
+
+    @GetMapping("/group/{id}")
+    public ResponseEntity<List<PostDTO>> getAllPostsByGroupID(@PathVariable Integer id) {
+        return new ResponseEntity<>(this.postService.findAllByGroupID(id), HttpStatus.OK);
     }
 
 }

@@ -80,4 +80,12 @@ public class GroupController {
     public ResponseEntity<List<GroupDTO>> getAllUserGroups(@PathVariable int id) {
         return new ResponseEntity<>(this.groupService.findAllByUser(id), HttpStatus.OK);
     }
+
+    @GetMapping("admins/{groupID}")
+    public ResponseEntity<List<GroupAdminDTO>> getAllAdminsForGroup(@PathVariable Integer groupID) {
+        return new ResponseEntity<>(this.groupAdminService.findAllByGroupID(groupID), HttpStatus.OK);
+    }
+
+
+
 }

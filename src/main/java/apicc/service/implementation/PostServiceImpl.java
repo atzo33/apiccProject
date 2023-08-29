@@ -1,10 +1,13 @@
 package apicc.service.implementation;
 
+import apicc.model.dto.GroupDTO;
 import apicc.model.dto.PostDTO;
 import apicc.model.dto.UserDTO;
+import apicc.model.entity.Group;
 import apicc.model.entity.Post;
 import apicc.model.entity.User;
 import apicc.repository.PostRepository;
+import apicc.service.GroupService;
 import apicc.service.PostService;
 import apicc.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -25,6 +28,35 @@ public class PostServiceImpl implements PostService {
     private UserService userService;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private GroupService groupService;
+
+    @Override
+    public PostDTO newPostForGroup(PostDTO newPostDTO) {
+
+        Post newPost = new Post();
+
+        newPost.setCreationDate(LocalDateTime.now());
+
+        newPost.setContent(newPostDTO.getContent());
+
+        User user = userService.loggedUser();
+        newPost.setUser(user);
+        GroupDTO group = groupService.findById(newPostDTO.getGroupId());
+        newPost.setGroup(modelMapper.map(group, Group.class));
+
+
+        newPost = postRepository.save(newPost);
+
+
+        newPostDTO.setId(newPost.getId());
+
+        newPostDTO.setUser(modelMapper.map(user, UserDTO.class));
+
+        return newPostDTO;
+
+    }
+
     @Override
     public PostDTO newPost(PostDTO newPostDTO) {
 
@@ -37,7 +69,10 @@ public class PostServiceImpl implements PostService {
         User user = userService.loggedUser();
         newPost.setUser(user);
 
+
+
         newPost = postRepository.save(newPost);
+
 
         newPostDTO.setId(newPost.getId());
 
@@ -46,6 +81,8 @@ public class PostServiceImpl implements PostService {
         return newPostDTO;
 
     }
+
+
 
 
 
@@ -114,6 +151,8 @@ public class PostServiceImpl implements PostService {
 
 
 
+
+
     @Override
     public PostDTO findById(int id) {
 
@@ -149,5 +188,19 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post findOnePost(int id) {
         return postRepository.findFirstByIdWithCollections(id).orElseThrow(() -> new EntityNotFoundException("Post not found"));
+    }
+
+    @Override
+    public List<PostDTO> findAllByGroupID(int id) {
+        List<Post> posts = postRepository.findAllPostsByGroup(id);
+        List<PostDTO> postDTOS = new ArrayList<>();
+        for(Post post : posts){
+            if (post.getGroup().getId() == id) {
+                PostDTO postDTO = modelMapper.map(post, PostDTO.class);
+                postDTO.setUser(modelMapper.map(post.getUser(),UserDTO.class));
+                postDTOS.add(postDTO);
+            }
+        }
+        return postDTOS;
     }
 }

@@ -20,6 +20,8 @@ public class PostDTO {
 
     private String content;
 
+    private Integer groupId;
+
 
     private String creationDate;
 }
