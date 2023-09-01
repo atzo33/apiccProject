@@ -24,4 +24,6 @@ public interface GroupService {
     GroupRequestDTO joinGroup(int id);
 
     List<GroupRequestDTO> getAllPendingMembersForGroup(int id);
+
+    List<GroupRequestDTO> findAllMembersForGroup(int id);
 }

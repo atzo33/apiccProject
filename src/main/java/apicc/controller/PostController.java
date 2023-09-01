@@ -26,6 +26,11 @@ public class PostController {
         return new ResponseEntity<>(this.postService.newPost(newPost), HttpStatus.OK);
     }
 
+    @GetMapping
+    public ResponseEntity<List<PostDTO>> getAllRandomized() {
+        return new ResponseEntity<>(this.postService.findAll(), HttpStatus.OK);
+    }
+
     @PostMapping("/group/add")
     public ResponseEntity<PostDTO> createForGroup(@RequestBody @Validated PostDTO newPost){
 

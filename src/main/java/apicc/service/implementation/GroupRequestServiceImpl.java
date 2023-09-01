@@ -1,16 +1,11 @@
 package apicc.service.implementation;
 
-import apicc.model.dto.GroupDTO;
 import apicc.model.dto.GroupRequestDTO;
-import apicc.model.dto.PostDTO;
-import apicc.model.dto.UserDTO;
 import apicc.model.entity.Group;
 import apicc.model.entity.GroupRequest;
-import apicc.model.entity.Post;
 import apicc.model.entity.User;
 import apicc.repository.GroupRequestRepository;
 import apicc.service.GroupRequestService;
-import apicc.service.GroupService;
 import apicc.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +84,33 @@ public class GroupRequestServiceImpl implements GroupRequestService {
 
         GroupRequest groupRequest = this.groupRequestRepository.findFirstById(groupRequestID).orElseThrow(() -> new EntityNotFoundException("Entity not found"));
         groupRequest.setApproved(updateStatus);
+
+        groupRequest.setAt(LocalDateTime.now());
+
+        groupRequest = groupRequestRepository.save(groupRequest);
+
+        return modelMapper.map(groupRequest, GroupRequestDTO.class);
+
+    }
+
+    @Override
+    public GroupRequestDTO approveRequest(int id) {
+
+        GroupRequest groupRequest = this.groupRequestRepository.findFirstById(id).orElseThrow(() -> new EntityNotFoundException("Entity not found"));
+        groupRequest.setApproved(true);
+
+        groupRequest.setAt(LocalDateTime.now());
+
+        groupRequest = groupRequestRepository.save(groupRequest);
+
+        return modelMapper.map(groupRequest, GroupRequestDTO.class);
+
+    }
+    @Override
+    public GroupRequestDTO rejectRequest(int id) {
+
+        GroupRequest groupRequest = this.groupRequestRepository.findFirstById(id).orElseThrow(() -> new EntityNotFoundException("Entity not found"));
+        groupRequest.setApproved(false);
 
         groupRequest.setAt(LocalDateTime.now());
 

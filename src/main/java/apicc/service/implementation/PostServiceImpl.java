@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -140,12 +141,14 @@ public class PostServiceImpl implements PostService {
         List<PostDTO> postDTOs = new ArrayList<>();
 
         for (Post post : posts) {
-            PostDTO postDTO = modelMapper.map(post, PostDTO.class);
-            postDTOs.add(postDTO);
+            if(!post.isDeleted()) {
+                PostDTO postDTO = modelMapper.map(post, PostDTO.class);
+                postDTOs.add(postDTO);
+            }
         }
 
 
-
+        Collections.shuffle(postDTOs);
         return postDTOs;
     }
 
@@ -203,4 +206,6 @@ public class PostServiceImpl implements PostService {
         }
         return postDTOS;
     }
+
+
 }

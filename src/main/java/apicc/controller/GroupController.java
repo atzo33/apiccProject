@@ -48,6 +48,13 @@ public class GroupController {
         return new ResponseEntity<>(this.groupService.findAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<GroupDTO>> getAllByUser(@PathVariable int id) {
+        return new ResponseEntity<>(this.groupService.findAllByUser(id), HttpStatus.OK);
+    }
+
+
+
     @PutMapping("/{id}")
     public ResponseEntity<GroupDTO> update(@RequestBody GroupDTO groupDTO) {
         return new ResponseEntity<>(this.groupService.updateGroup(groupDTO), HttpStatus.OK);
@@ -71,19 +78,28 @@ public class GroupController {
         return new ResponseEntity<>(this.groupService.getAllPendingMembersForGroup(id), HttpStatus.OK);
     }
 
-    @PostMapping("/members/update-join-request")
-    public ResponseEntity<GroupRequestDTO> approveMemberJoin(@RequestBody GroupRequestDTO approveGroupJoinDTO) {
-        return new ResponseEntity<>(this.groupRequestService.update(approveGroupJoinDTO.isApproved(),approveGroupJoinDTO.getId()), HttpStatus.OK);
+    @PutMapping("/members/approve-join-request/{id}")
+    public ResponseEntity<GroupRequestDTO> approveMemberJoin(@PathVariable int id) {
+        return new ResponseEntity<>(this.groupRequestService.approveRequest(id), HttpStatus.OK);
     }
 
-    @GetMapping("/user/{id}")
-    public ResponseEntity<List<GroupDTO>> getAllUserGroups(@PathVariable int id) {
-        return new ResponseEntity<>(this.groupService.findAllByUser(id), HttpStatus.OK);
+    @PutMapping("/members/reject-join-request/{id}")
+    public ResponseEntity<GroupRequestDTO> rejectMemberJoin(@PathVariable int id) {
+        return new ResponseEntity<>(this.groupRequestService.rejectRequest(id), HttpStatus.OK);
     }
+
+
+
+
 
     @GetMapping("admins/{groupID}")
     public ResponseEntity<List<GroupAdminDTO>> getAllAdminsForGroup(@PathVariable Integer groupID) {
         return new ResponseEntity<>(this.groupAdminService.findAllByGroupID(groupID), HttpStatus.OK);
+    }
+
+    @GetMapping("/members/{id}")
+    public ResponseEntity<List<GroupRequestDTO>> findAllMembersForGroup(@PathVariable Integer id) {
+        return new ResponseEntity<>(this.groupService.findAllMembersForGroup(id), HttpStatus.OK);
     }
 
 

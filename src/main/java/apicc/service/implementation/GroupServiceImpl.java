@@ -140,4 +140,10 @@ public class GroupServiceImpl implements GroupService {
     }
 
 
+    @Override
+    public List<GroupRequestDTO> findAllMembersForGroup(int id) {
+        return this.groupRequestService.findAllMembersByGroupID(id);
+    }
+
+
 }
