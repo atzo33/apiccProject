@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,25 +19,42 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Integer id;
-    @Column(name = "text",nullable = false)
+
+    @Column(nullable = false)
     private String text;
-    @ManyToOne
-    private Comment owner;
-    @Column(name = "timeOfComment",nullable = false)
-    private LocalDate timeOfComment;
-    @Column(name = "deleted",nullable = false)
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(nullable = false)
     private boolean isDeleted;
-    @OneToMany(fetch = FetchType.LAZY)
-    private Set<Comment> replies = new HashSet<>();
+
     @ManyToOne
     private User user;
-    @ManyToOne
-    private Post post;
-    @OneToMany(fetch = FetchType.LAZY)
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     private Set<Reactions> reactions = new HashSet<>();
-    @OneToMany(fetch = FetchType.LAZY)
-    private Set<Report> reports = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
+
+    @ManyToOne
+    private Comment parent;
+
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Comment> replies = new HashSet<>();
+
+    public void addReply(Comment reply) {
+        replies.add(reply);
+        reply.setParent(this);
+    }
+
+    public void removeReply(Comment reply) {
+        replies.remove(reply);
+        reply.setParent(null);
+    }
+
 
 }
